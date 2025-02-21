@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matn Ko'paytirish</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+        }
+        input, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #ff5277, #ff6aa1);
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .text-output {
+            display: none;
+        }
+    </style>
+    <script>
+        function repeatText() {
+            let text = document.getElementById("text").value;
+            let count = parseInt(document.getElementById("count").value);
+            let output = document.getElementById("output");
+            output.innerHTML = "";
+            
+            if (count > 100) {
+                let hiddenText = "";
+                for (let i = 0; i < count; i++) {
+                    hiddenText += text + "\n";
+                }
+                let hiddenInput = document.createElement("textarea");
+                hiddenInput.className = "text-output";
+                hiddenInput.value = hiddenText;
+                output.appendChild(hiddenInput);
+                
+                let copyButton = document.createElement("button");
+                copyButton.textContent = "📋 Buyurtma tayyor!";
+                copyButton.style.margin = "auto";
+                copyButton.style.display = "block";
+                copyButton.onclick = function() {
+                    hiddenInput.select();
+                    document.execCommand("copy");
+                    alert("Matn nusxalandi!");
+                };
+                output.appendChild(copyButton);
+            } else {
+                for (let i = 0; i < count; i++) {
+                    let p = document.createElement("p");
+                    p.className = "text-output";
+                    p.innerHTML = text;
+                    output.appendChild(p);
+                }
+                let copyButton = document.createElement("button");
+                copyButton.textContent = "📋 Buyurtma tayyor!";
+                copyButton.style.margin = "auto";
+                copyButton.style.display = "block";
+                copyButton.onclick = copyText;
+                output.appendChild(copyButton);
+            }
+        }
+        
+        function copyText() {
+            let textElements = document.querySelectorAll(".text-output");
+            let textToCopy = "";
+            textElements.forEach(element => {
+                textToCopy += element.innerHTML + "\n";
+            });
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("Matn nusxalandi!");
+            }).catch(err => {
+                console.error("Nusxalashda xatolik yuz berdi", err);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Matn Ko'paytirish Dasturi</h2>
+        <input type="text" id="text" placeholder="Matn kiriting">
+        <input type="number" id="count" placeholder="Nechta kerak?">
+        <button onclick="repeatText()">Ko'paytirish</button>
+        <div id="output"></div>
+    </div>
+</body>
+</html>
